@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard สาขาปลูกถ่ายอวัยวะ</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14284b;--mut:#5b6b8c;--bg1:#e8f7ff;--bg2:#fff1f6;--card:#fff;--teal:#00b8a9;--coral:#ff5a6e;--sun:#ffb703;--vio:#7a4dff;--sky:#1fb6ff;--ok:#12b886;--bad:#ff4d6d}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Prompt','Noto Sans Thai',sans-serif;color:var(--ink);background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100vh;padding:18px}
+.wrap{max-width:1280px;margin:auto}
+header{border-radius:26px;padding:26px 30px;color:#fff;background:linear-gradient(120deg,#0a8f9c,#1fb6ff 45%,#7a4dff);display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 14px 34px #1fb6ff55}
+header h1{font-size:clamp(22px,3.2vw,34px);font-weight:700}
+header p{opacity:.92;margin-top:4px;font-size:15px}
+.art{display:flex;gap:6px}.art svg{width:64px;height:64px;filter:drop-shadow(0 6px 8px #0004)}
+.ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 4px;font-size:14px;color:var(--mut)}
+.pill{display:inline-flex;gap:8px;align-items:center;background:#fff;border-radius:99px;padding:7px 14px;box-shadow:0 3px 10px #14284b14}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--ok);animation:pl 1.6s infinite}
+.dot.off{background:var(--sun);animation:none}.dot.err{background:var(--bad);animation:none}
+@keyframes pl{50%{box-shadow:0 0 0 6px #12b88633}}
+button,select{font:inherit;border:0;border-radius:99px;padding:7px 14px;background:var(--vio);color:#fff;cursor:pointer}
+select{background:#fff;color:var(--ink);box-shadow:0 3px 10px #14284b14}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sun)}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));margin-top:16px}
+.card{background:var(--card);border-radius:22px;padding:20px;box-shadow:0 10px 26px #14284b14;position:relative;overflow:hidden}
+.kpi{color:#fff;min-height:190px}
+.kpi h3{font-size:14px;font-weight:500;opacity:.95;max-width:70%}
+.kpi .v{font-size:42px;font-weight:700;margin:8px 0 2px}
+.kpi small{display:block;opacity:.95;font-size:13px}
+.kpi svg.im{position:absolute;right:10px;top:10px;width:84px;height:84px;filter:drop-shadow(0 8px 8px #0003)}
+.k1{background:linear-gradient(135deg,#ff5a6e,#ff9a5a)}.k2{background:linear-gradient(135deg,#1fb6ff,#7a4dff)}
+.k3{background:linear-gradient(135deg,#00b8a9,#59d98e)}.k4{background:linear-gradient(135deg,#ffb703,#ff7a18)}
+.chip{display:inline-block;border-radius:99px;padding:2px 12px;font-size:13px;font-weight:600;margin-top:8px}
+.chip.p{background:#e3fff3;color:#0b8a60}.chip.f{background:#ffe3e8;color:#d6264a}.chip.n{background:#eef1f8;color:var(--mut)}
+.kpi .chip{background:#ffffffee}
+h2{font-size:17px;margin-bottom:12px}
+.hb{display:grid;grid-template-columns:minmax(120px,190px) 1fr 54px;gap:8px;align-items:center;margin:7px 0;font-size:13px}
+.hb .t{background:#eef3fb;border-radius:99px;height:16px;overflow:hidden}
+.hb .t i{display:block;height:100%;border-radius:99px;transition:width .8s}
+.hb b{text-align:right}
+.donutrow{display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center}
+.lg div{display:flex;gap:8px;align-items:center;margin:6px 0;font-size:14px}.lg i{width:14px;height:14px;border-radius:5px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:#f1f5fd;text-align:left;padding:10px;position:sticky;top:0}
+td{padding:9px 10px;border-bottom:1px solid #eef1f8}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.sc{max-height:440px;overflow:auto;border-radius:14px}
+input{font:inherit;padding:8px 14px;border-radius:99px;border:2px solid #dfe7f6;width:100%;max-width:300px;margin-bottom:10px}
+.orig{width:100%;font-size:13px}.opts{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.opts input{margin:0;flex:1 1 220px}.opts label{font-size:13px;color:var(--mut)}.opts select{margin-left:6px}.sc{max-height:none!important}.orig th,.orig td{border:1px solid #c9d3e6;padding:8px 10px}.orig th{text-align:center;vertical-align:middle;position:static}.orig .h1{background:#ffe3e8}.orig .h2{background:#dff1ff}.orig .hg{background:#f1f5fd}.orig tr.tot td{background:#fff7d6;font-weight:700}.orig td.c{text-align:center}.orig td.err{color:#d6264a;text-align:right}.sc{max-height:none;overflow-x:auto}
+.alert{margin-top:16px;border-radius:18px;padding:14px 18px;background:#fff7e0;border:2px solid var(--sun);font-size:14px}
+.alert.hide{display:none}
+footer{margin:22px 4px;font-size:12.5px;color:var(--mut)}
+@media(prefers-reduced-motion:reduce){.dot,.hb .t i{animation:none;transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<radialGradient id="gh" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ff8a95"/><stop offset=".55" stop-color="#d8102f"/><stop offset="1" stop-color="#7d0618"/></radialGradient>
+<radialGradient id="gk" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ff9e7a"/><stop offset=".6" stop-color="#b8321e"/><stop offset="1" stop-color="#6b1409"/></radialGradient>
+<radialGradient id="gl" cx=".3" cy=".3" r=".95"><stop offset="0" stop-color="#d9775a"/><stop offset=".6" stop-color="#8f3220"/><stop offset="1" stop-color="#521308"/></radialGradient>
+<radialGradient id="gi" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#0b3d66"/><stop offset=".55" stop-color="#2d9cdb"/><stop offset=".9" stop-color="#0d5a8f"/><stop offset="1" stop-color="#06263f"/></radialGradient>
+<radialGradient id="gs" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#cfe0ee"/></radialGradient>
+<symbol id="heart" viewBox="0 0 120 120"><path d="M48 18 C46 6 58 2 62 14 L66 24Z" fill="#c4122c"/><path d="M70 22 C84 2 104 8 98 28 L84 36Z" fill="#a50e24"/><path d="M60 112 C16 80 4 50 20 30 C34 14 54 20 60 38 C66 20 88 14 102 30 C118 50 104 80 60 112Z" fill="url(#gh)"/><path d="M28 38 C34 28 46 28 52 40" stroke="#ffd0d6" stroke-width="4" stroke-linecap="round" fill="none" opacity=".75"/><path d="M60 40 C58 62 66 82 60 104" stroke="#7d0618" stroke-width="2" fill="none" opacity=".5"/></symbol>
+<symbol id="eye" viewBox="0 0 120 120"><path d="M6 60 C28 22 92 22 114 60 C92 98 28 98 6 60Z" fill="url(#gs)" stroke="#e7a9a0" stroke-width="3"/><circle cx="60" cy="60" r="27" fill="url(#gi)"/><circle cx="60" cy="60" r="12" fill="#030a12"/><circle cx="50" cy="49" r="7" fill="#fff" opacity=".9"/><circle cx="70" cy="70" r="3" fill="#fff" opacity=".6"/></symbol>
+<symbol id="kidney" viewBox="0 0 120 120"><path d="M82 12 C112 18 116 56 98 86 C84 112 46 114 38 90 C34 78 52 72 52 60 C52 46 30 44 30 30 C32 14 62 8 82 12Z" fill="url(#gk)"/><path d="M52 24 C70 20 92 28 98 48" stroke="#ffc0a8" stroke-width="4" stroke-linecap="round" fill="none" opacity=".6"/><path d="M50 62 C34 62 20 70 12 82" stroke="#e8a070" stroke-width="6" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="liver" viewBox="0 0 120 120"><path d="M8 48 C30 22 80 16 112 36 C116 66 92 100 58 98 C34 96 20 78 8 48Z" fill="url(#gl)"/><path d="M26 44 C46 32 74 32 98 44" stroke="#f0a690" stroke-width="4" stroke-linecap="round" fill="none" opacity=".6"/><path d="M58 98 C56 108 62 112 70 114" stroke="#2d8a4e" stroke-width="7" stroke-linecap="round" fill="none"/></symbol>
+</defs></svg>
+<div class="wrap">
+<header>
+ <div><h1>Dashboard สาขาปลูกถ่ายอวัยวะ</h1><p id="sub">เขตสุขภาพที่ 5 · กำลังโหลดข้อมูล…</p></div>
+ <div class="art"><svg><use href="#heart"/></svg><svg><use href="#eye"/></svg><svg><use href="#kidney"/></svg><svg><use href="#liver"/></svg></div>
+</header>
+<div class="ctl">
+ <span class="pill"><span class="dot off" id="dot"></span><span id="stat">เชื่อมต่อ Google Sheet…</span></span>
+ <span class="pill">รีเฟรชถัดไปใน <b id="cd">–</b> วินาที</span>
+ <label class="pill">ดึงซ้ำทุก <select id="iv"><option value="30">30 วินาที</option><option value="45" selected>45 วินาที</option><option value="60">60 วินาที</option></select></label>
+ <button id="rf">ดึงข้อมูลตอนนี้</button>
+</div>
+<section class="grid kpis" id="kpis"></section>
+<section class="grid two">
+ <div class="card"><h2>แนวโน้มตัวชี้วัดที่ 1 รายปี (อัตราส่วนผู้บริจาคสมองตาย)</h2><div id="trend"></div></div>
+ <div class="card"><h2>ผลการประเมินรายหน่วยบริการ (ตัวชี้วัดที่ 2)</h2><div class="donutrow" id="donut"></div></div>
+</section>
+<section class="grid two">
+ <div class="card" style="grid-column:1/-1"><h2>จำนวนผู้แสดงความจำนงรายใหม่ (ปีงบประมาณ 2569) รายโรงพยาบาล</h2><div id="bars"></div></div>
+</section>
+<section class="card" style="margin-top:16px">
+ <h2>ผลการดำเนินงานรายหน่วยบริการ</h2>
+ <div class="opts"><input id="q" placeholder="ค้นหาชื่อโรงพยาบาล…" aria-label="ค้นหาโรงพยาบาล">
+  <label>แสดงตัวชี้วัด<select id="fi"><option value="0">ทั้ง 2 ตัวชี้วัด</option><option value="1">เฉพาะตัวชี้วัดที่ 1</option><option value="2">เฉพาะตัวชี้วัดที่ 2</option></select></label>
+  <label>ผลการประเมิน<select id="fp"><option value="">ทั้งหมด</option><option value="ผ่าน">ผ่าน</option><option value="ไม่ผ่าน">ไม่ผ่าน</option></select></label>
+  <label>เรียงลำดับ<select id="fo"><option value="no">ตามลำดับเดิม</option><option value="a2">รายใหม่ (A) มาก→น้อย</option><option value="name">ชื่อ ก→ฮ</option></select></label>
+  <button id="fr" type="button">ล้างตัวเลือก</button></div>
+ <div class="sc"><table id="tb" class="orig"></table></div>
+ <p id="tdate" style="font-size:13px;color:var(--mut);margin-top:8px"></p>
+</section>
+<footer>แหล่งข้อมูล: Google Sheet “สาขาปลูกถ่ายอวัยวะ” (อ่านอัตโนมัติ ผู้ใช้แก้ไขในชีตแล้วหน้านี้จะอัปเดตเองตามรอบ) · ต้องตั้งค่าการแชร์ชีตเป็น “ทุกคนที่มีลิงก์ ดูได้” · แสดงผลเพื่อการบริหาร ควรตรวจสอบกับต้นฉบับก่อนเผยแพร่</footer>
+</div>
+<script>
+/* ===== ตั้งค่า ===== */
+const CFG={SHEET_ID:'1fCBjTrL7mUWHEhbpnQOb8NyclpTOSadBreaosIuo8dQ',SHEET_NAME:'ชีต1',GID:'0'};
+/* ข้อมูลสำรอง (ข้อมูล ณ 19 ต.ค. 2569) ใช้เมื่อเชื่อมต่อชีตไม่ได้ */
+const FB={date:'ข้อมูล ณ วันที่ 19 ตุลาคม พ.ศ. 2569',ind1:[.06,.2,.25,.17],ind2:[NaN,NaN,NaN,74.7],
+total:{a1:4,b1:2348,r1:.17,p1:'ไม่ผ่าน',a2:5000,b2:1810,r2:276.24,p2:'ไม่ผ่าน'},
+hosp:[['พหลพลพยุหเสนา',1189,1810,'ไม่ผ่าน',4,2348],['มะการักษ์',50,0,'ไม่ผ่าน'],['ทองผาภูมิ',46,NaN,'ไม่ผ่าน'],['สมเด็จพระสังฆราชองค์ที่ 19',3,NaN,'ไม่ผ่าน'],['บ่อพลอย',0,NaN,'ไม่ผ่าน'],['สังขละบุรี',0,NaN,'ผ่าน'],['เจ้าคุณไพบูลย์พนมทวน',0,NaN,'ผ่าน'],['ด่านมะขามเตี้ย',11,NaN,'ผ่าน'],['ท่ากระดาน',26,NaN,'ผ่าน'],['ไทรโยค',0,NaN,'ผ่าน'],['เลาขวัญ',0,NaN,'ไม่ผ่าน'],['พยาบาลสถานพระบารมี',0,NaN,'ผ่าน'],['สมเด็จพระปิยมหาราชรมณียเขต',0,NaN,'ผ่าน'],['ห้วยกระเจาเฉลิมพระเกียรติ 80 พรรษา',0,NaN,'ผ่าน'],['ศุกร์ศิริศรีสวัสดิ์',0,NaN,'ไม่ผ่าน'],['หนองปรือ',27,NaN,'ไม่ผ่าน']].map((h,i)=>({no:i+1,name:'รพ.'+h[0],a2:h[1],b2:h[2],p2:h[3],a1:h[4]??NaN,b1:h[5]??NaN,r1:NaN,p1:'',r2:NaN}))};
+let D=FB,live=false,timer=null,left=45,lastOk=null,busy=false;
+const $=id=>document.getElementById(id);
+const num=s=>{if(s==null)return NaN;s=String(s).replace(/[,%\s]/g,'');return s===''||isNaN(+s)?NaN:+s};
+const f=(v,d=2)=>Number.isFinite(v)?v.toLocaleString('th-TH',{minimumFractionDigits:d,maximumFractionDigits:d}):'–';
+const f0=v=>f(v,0);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const isP=x=>x==='ผ่าน'||x==='ไม่ผ่าน';
+function csv(t){const R=[];let r=[],c='',q=false;for(let i=0;i<t.length;i++){const ch=t[i];
+ if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}
+ else if(ch=='"')q=true;else if(ch==','){r.push(c);c=''}else if(ch=='\n'||ch=='\r'){if(ch=='\r'&&t[i+1]=='\n')i++;r.push(c);R.push(r);r=[];c=''}else c+=ch}
+ if(c||r.length){r.push(c);R.push(r)}return R}
+function blk(c,p){return{a:num(c[p-3]),b:num(c[p-2]),r:num(c[p-1]),p:c[p]}}
+function parse(rows){const d={date:'',ind1:[NaN,NaN,NaN,NaN],ind2:[NaN,NaN,NaN,NaN],hosp:[],total:null};
+ for(const r of rows){const c=r.map(x=>(x||'').trim());const nz=c.filter(Boolean);if(!nz.length)continue;const first=nz[0];
+  if(!d.date){const m=nz.find(x=>x.includes('ข้อมูล ณ วันที่')&&x.includes('พ.ศ.'));if(m)d.date=m}
+  if(/^1\./.test(first)&&first.includes('อัตราส่วน'))d.ind1=nz.slice(-4).map(num);
+  else if(/^2\./.test(first)&&first.includes('ร้อยละ'))d.ind2=nz.slice(-4).map(num);
+  else{const pi=c.map((x,i)=>isP(x)?i:-1).filter(i=>i>=0);
+   const ni=c.findIndex(x=>/^รพ\./.test(x)),ti=c.findIndex(x=>x.startsWith('รวมทั้งสิ้น'));
+   if((ni>=0||ti>=0)&&pi.length){const p2=pi[pi.length-1],B2=blk(c,p2);const B1=pi.length>1?blk(c,pi[0]):{a:NaN,b:NaN,r:NaN,p:''};
+    const o={a1:B1.a,b1:B1.b,r1:B1.r,p1:B1.p,a2:B2.a,b2:B2.b,r2:B2.r,p2:B2.p};
+    if(ti>=0)d.total=o;else d.hosp.push({no:c[ni-1]||d.hosp.length+1,name:c[ni],...o})}}}
+ if(!d.hosp.length)throw new Error('ไม่พบข้อมูลโรงพยาบาลในชีต');return d}
+function jsonp(url){return new Promise((ok,no)=>{const n='g'+Date.now(),s=document.createElement('script');
+ window[n]=j=>{delete window[n];s.remove();ok(j)};s.onerror=()=>{s.remove();no(new Error('JSONP ล้มเหลว'))};s.src=url+'&tqx=responseHandler:'+n;document.head.appendChild(s)})}
+async function load(){
+ const base=`https://docs.google.com/spreadsheets/d/${CFG.SHEET_ID}/gviz/tq`,sh='sheet='+encodeURIComponent(CFG.SHEET_NAME),ts='&_='+Date.now();
+ try{const r=await fetch(`${base}?tqx=out:csv&${sh}${ts}`,{cache:'no-store'});if(!r.ok)throw 0;return parse(csv(await r.text()))}
+ catch(e){const j=await jsonp(`${base}?${sh}${ts}`);
+  const rows=j.table.rows.map(r=>(r.c||[]).map(x=>x?(x.f??x.v??''):''));return parse(rows.map(r=>r.map(String)))}}
+async function refresh(){if(busy)return;busy=true;$('dot').className='dot off';$('stat').textContent='กำลังดึงข้อมูล…';
+ try{D=await load();live=true;lastOk=new Date();$('dot').className='dot';$('stat').textContent='เชื่อมต่อสด · อัปเดต '+lastOk.toLocaleTimeString('th-TH')}
+ catch(e){live=false;$('dot').className='dot err';$('stat').textContent='เชื่อมต่อไม่ได้'+(lastOk?' · แสดงข้อมูลล่าสุด '+lastOk.toLocaleTimeString('th-TH'):' · แสดงข้อมูลสำรอง ณ 19 ต.ค. 2569')}
+ busy=false;left=+$('iv').value;render()}
+function render(){const h=D.hosp,T=D.total||{};
+ $('sub').textContent='เขตสุขภาพที่ 5 · '+(D.date||'')+(live?'':' (ข้อมูลสำรอง)');
+ const sumA2=h.reduce((s,x)=>s+(x.a2||0),0),sumA1=h.reduce((s,x)=>s+(x.a1||0),0);
+ const B2=Number.isFinite(T.b2)?T.b2:(h.find(x=>x.b2>0)||{}).b2,B1=Number.isFinite(T.b1)?T.b1:(h.find(x=>x.b1>0)||{}).b1;
+ const pct2=Number.isFinite(D.ind2[3])?D.ind2[3]:sumA2/B2*100;
+ const r1=Number.isFinite(D.ind1[3])?D.ind1[3]:T.r1;
+ const prev=D.ind1[2],chg=Number.isFinite(prev)&&prev?(r1-prev)/prev*100:NaN;
+ const rep=h.filter(x=>x.a2>0).length,pass=h.filter(x=>x.p2==='ผ่าน').length;
+ const ch=p=>p?`<span class="chip ${p==='ผ่าน'?'p':'f'}">${esc(p)}</span>`:'<span class="chip n">–</span>';
+ $('kpis').innerHTML=`
+ <div class="card kpi k1"><svg class="im"><use href="#heart"/></svg><h3>1. อัตราส่วนผู้บริจาคอวัยวะสมองตาย ต่อผู้เสียชีวิตใน รพ.</h3><div class="v">${f(r1)}</div><small>ผู้บริจาค ${f0(T.a1??sumA1)} ราย ÷ ผู้เสียชีวิต ${f0(B1)} ราย</small><small>เกณฑ์ เพิ่มขึ้นร้อยละ 5 · เทียบปี 2568: ${Number.isFinite(chg)?(chg>0?'+':'')+f(chg,1)+'%':'–'}</small>${ch(T.p1)}</div>
+ <div class="card kpi k2"><svg class="im"><use href="#eye"/></svg><h3>2. ร้อยละผู้แสดงความจำนงบริจาคดวงตา/อวัยวะ (รายใหม่)</h3><div class="v">${f(pct2)}%</div><small>รายใหม่รวม ${f0(sumA2)} ราย ÷ สะสมสิ้น ปีงบ 2568 ${f0(B2)} ราย</small><small>เกณฑ์ เพิ่มขึ้นร้อยละ 10</small>${ch(T.p2)}</div>
+ <div class="card kpi k3"><svg class="im"><use href="#kidney"/></svg><h3>โรงพยาบาลที่มีผู้แสดงความจำนงรายใหม่</h3><div class="v">${rep}<span style="font-size:20px"> / ${h.length}</span></div><small>แห่งที่มีรายใหม่ในปีงบประมาณ 2569</small><small>รวมทั้งจังหวัด ${f0(sumA2)} ราย</small></div>
+ <div class="card kpi k4"><svg class="im"><use href="#liver"/></svg><h3>โรงพยาบาลที่ผ่านเกณฑ์ตัวชี้วัดที่ 2</h3><div class="v">${pass}<span style="font-size:20px"> / ${h.length}</span></div><small>คิดเป็นร้อยละ ${f(pass/h.length*100,1)}</small><small>ไม่ผ่าน ${h.length-pass} แห่ง</small></div>`;
+ /* trend */
+ const yrs=['2566','2567','2568','2569'],v=D.ind1,mx=Math.max(...v.filter(Number.isFinite),.01)*1.25,cols=['#1fb6ff','#7a4dff','#ff9a5a','#ff5a6e'];
+ $('trend').innerHTML=`<svg viewBox="0 0 440 230" width="100%" role="img" aria-label="แนวโน้มรายปี"><defs>${cols.map((c,i)=>`<linearGradient id="tg${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${c}" stop-opacity=".45"/></linearGradient>`).join('')}</defs>`+
+ yrs.map((y,i)=>{const x=30+i*100,hh=Number.isFinite(v[i])?v[i]/mx*160:0;return `<rect x="${x}" y="${190-hh}" width="70" height="${hh}" rx="12" fill="url(#tg${i})"/><text x="${x+35}" y="${182-hh}" text-anchor="middle" font-size="15" font-weight="700" fill="#14284b">${f(v[i])}</text><text x="${x+35}" y="214" text-anchor="middle" font-size="13" fill="#5b6b8c">พ.ศ. ${y}</text>`}).join('')+'</svg>';
+ /* donut */
+ const n=h.length-pass,C=2*Math.PI*52,pp=pass/h.length*C;
+ $('donut').innerHTML=`<svg viewBox="0 0 140 140" width="190" height="190"><circle cx="70" cy="70" r="52" fill="none" stroke="#ff4d6d" stroke-width="22"/><circle cx="70" cy="70" r="52" fill="none" stroke="#12b886" stroke-width="22" stroke-dasharray="${pp} ${C}" transform="rotate(-90 70 70)" stroke-linecap="butt"/><text x="70" y="68" text-anchor="middle" font-size="26" font-weight="700" fill="#14284b">${f(pass/h.length*100,0)}%</text><text x="70" y="86" text-anchor="middle" font-size="11" fill="#5b6b8c">ผ่านเกณฑ์</text></svg><div class="lg"><div><i style="background:#12b886"></i>ผ่าน ${pass} แห่ง</div><div><i style="background:#ff4d6d"></i>ไม่ผ่าน ${n} แห่ง</div><div style="color:#5b6b8c">รวม ${h.length} หน่วยบริการ</div></div>`;
+ /* bars */
+ const s=[...h].sort((a,b)=>(b.a2||0)-(a.a2||0)),m=Math.max(...s.map(x=>x.a2||0),1);
+ $('bars').innerHTML=s.map(x=>`<div class="hb"><span>${esc(x.name)}</span><span class="t"><i style="width:${(x.a2||0)/m*100}%;background:${x.p2==='ผ่าน'?'linear-gradient(90deg,#00b8a9,#59d98e)':'linear-gradient(90deg,#ff5a6e,#ff9a5a)'}"></i></span><b>${f0(x.a2||0)}</b></div>`).join('')+'<div style="font-size:12px;color:#5b6b8c;margin-top:8px">เขียว = ผ่าน · ส้มแดง = ไม่ผ่าน</div>';
+ drawTable()}
+function drawTable(){const k=$('q').value.trim(),T=D.total,m=$('fi').value,fp=$('fp').value,fo=$('fo').value;
+ const s1=m!=='2',s2=m!=='1';
+ const c=p=>p?`<span class="chip ${p==='ผ่าน'?'p':'f'}" style="margin:0">${esc(p)}</span>`:'';
+ const v=(x,d=0)=>Number.isFinite(x)?f(x,d):'';
+ const r2=x=>Number.isFinite(x.r2)?f(x.r2):(Number.isFinite(x.a2)&&!(x.b2>0)?null:'');
+ const row=(x,t)=>{const r=r2(x);return `<tr${t?' class="tot"':''}><td class="c">${t?'':esc(x.no)}</td><td>${t?'รวมทั้งสิ้น':esc(x.name)}</td>`+
+  (s1?`<td class="n">${v(x.a1)}</td><td class="n">${v(x.b1)}</td><td class="n">${Number.isFinite(x.r1)?f(x.r1):''}</td><td class="c">${c(x.p1)}</td>`:'')+
+  (s2?`<td class="n">${v(x.a2)}</td><td class="n">${v(x.b2)}</td>${r===null?'<td class="err">#DIV/0!</td>':`<td class="n">${r}</td>`}<td class="c">${c(x.p2)}</td>`:'')+'</tr>'};
+ const sub=['A','B','ผลงาน','ผ่าน/ไม่ผ่าน'].map(x=>`<th class="hg">${x}</th>`).join('');
+ let L=D.hosp.filter(x=>(!k||x.name.includes(k))&&(!fp||(m==='1'?x.p1:x.p2)===fp));
+ if(fo==='a2')L=[...L].sort((x,y)=>(y.a2||0)-(x.a2||0));else if(fo==='name')L=[...L].sort((x,y)=>x.name.localeCompare(y.name,'th'));
+ $('tb').innerHTML=`<tr><th rowspan="3">ลำดับ</th><th rowspan="3">หน่วยบริการ</th>`+
+  (s1?`<th colspan="4" class="h1">1. อัตราส่วนของจำนวนผู้บริจาคอวัยวะสมองตายที่ได้รับการผ่าตัดนำอวัยวะออก ต่อจำนวนผู้ป่วยเสียชีวิตในโรงพยาบาล<br>(รพ. P+, P, A+, A จำนวน 134 แห่ง ไม่รวม A ยกระดับ)</th>`:'')+
+  (s2?`<th colspan="4" class="h2">2. ร้อยละผู้แสดงความจำนงบริจาคดวงตา/อวัยวะ ที่เพิ่มขึ้นของประชากรในเขตสุขภาพที่ 5</th>`:'')+`</tr>
+  <tr>${s1?'<th colspan="4" class="h1">เป้าหมาย เพิ่มขึ้นร้อยละ 5</th>':''}${s2?'<th colspan="4" class="h2">เป้าหมาย เพิ่มขึ้นร้อยละ 10</th>':''}</tr>
+  <tr>${s1?sub:''}${s2?sub:''}</tr>`+L.map(x=>row(x,0)).join('')+(T&&!k&&!fp?row({...T,name:''},1):'')+(L.length?'':`<tr><td colspan="10" class="c">ไม่พบข้อมูลตามตัวเลือกที่เลือก</td></tr>`);
+ $('tdate').innerHTML='แสดง '+L.length+' จาก '+D.hosp.length+' หน่วยบริการ · A1 = ผู้บริจาคอวัยวะสมองตายที่ผ่าตัดนำอวัยวะออก ปีงบ 2569 · B1 = ผู้เสียชีวิตใน รพ.ทุกสาเหตุ ปีงบ 2568 · A2 = ผู้แสดงความจำนงรายใหม่ ปีงบ 2569 · B2 = ผู้แสดงความจำนงสะสมถึงสิ้นปีงบ 2568<br>'+esc(D.date||'')}
+['q','fi','fp','fo'].forEach(i=>$(i).addEventListener(i==='q'?'input':'change',drawTable));
+$('fr').onclick=()=>{$('q').value='';$('fi').value='0';$('fp').value='';$('fo').value='no';drawTable()};
+$('rf').onclick=refresh;$('iv').onchange=()=>{left=+$('iv').value};
+setInterval(()=>{if(document.hidden)return;left--;$('cd').textContent=Math.max(left,0);if(left<=0)refresh()},1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&lastOk&&(Date.now()-lastOk)>+$('iv').value*1000)refresh()});
+render();refresh();
+</script>
+</body>
+</html>
